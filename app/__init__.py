@@ -1,9 +1,8 @@
 import os
-from pydub import AudioSegment
-from pydub.playback import play
+from app import views
+from flask import Flask
 
-from flask import Flask, Response
-
+# Application factory
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping()
@@ -19,15 +18,12 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-    @app.route("/wav")
-    def stream_wav():
-        def generate():
-            with open("music.wav", "rb") as file:
-                data = file.read(1024)
-                while data:
-                    yield data
-                    data = file.read(1024)
-        return Response(generate(), mimetype="audio/x-wav")
-
-
+    
     return app
+
+app = create_app()
+
+app.add_url_rule('/', view_func=views.home)
+app.add_url_rule("/files", view_func=views.getAudioFilesNames)
+app.add_url_rule("/download", view_func=views.download)
+app.add_url_rule("/play/<title>", view_func=views.play)

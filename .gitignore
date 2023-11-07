@@ -1,3 +1,7 @@
 instance/
 venv/
-api/__pycache__/
+/lib/__pycache__/
+/lib/*.pyc
+/app/__pycache__/
+/app/*.pyc
+/files
