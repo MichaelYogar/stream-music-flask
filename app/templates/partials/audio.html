@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+{% for item in navigation %}
+<p>{{item}}</p>
+    <audio controls>
+    <source src={{"/play/" + item}} type="audio/mp4">
+  </audio>
+{% endfor %}
+{% endblock %}

@@ -1,19 +1,21 @@
-from flask import jsonify, make_response, request, render_template
+from flask import make_response, request, render_template
 from pytube import YouTube
 from lib import file
 
 
 def home():
-    return render_template("index.html")
+    return render_template("/partials/home.html")
 
 def getAudioFilesNames():
+    print("Called get audio files")
+    audioFiles = file.read_files("/files")
+    print(audioFiles)
     response = make_response(
-            jsonify(
-                {"message": ["file1", "file2"]}
-            ),
-            200,
+            render_template("partials/audio.html",
+                navigation=audioFiles),
         )
     response.headers["Content-Type"] = "application/json"
+    response.status = 200
     return response
 
 def download():
@@ -28,7 +30,7 @@ def download():
 def play(title):
     normal_title = file.normalize(title)
     def generate():
-        with open(f"./files/{normal_title}.mp4", "rb") as file:
+        with open(f"./files/{normal_title}", "rb") as file:
             data = file.read(1024)
             while data:
                 yield data
